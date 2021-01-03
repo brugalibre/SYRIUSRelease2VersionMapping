@@ -8,6 +8,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
+import com.adcubum.versionmapping.util.log.ConsoleLogger;
 import com.adcubum.versionmapping.xlscreate.exception.XLSSheetCreationException;
 import com.adcubum.versionmapping.xlscreate.format.XLSSheetFormatter;
 
@@ -38,6 +39,7 @@ public class XLSCreator {
    }
 
    public void readCsvAndCreateXlsFile(String xlsOutputFilePath) {
+      ConsoleLogger.log("Create file '" + xlsOutputFilePath + "'...");
       createAndFormatXlsSheet();
       writeWorkbook2FileAndClose(xlsOutputFilePath);
    }

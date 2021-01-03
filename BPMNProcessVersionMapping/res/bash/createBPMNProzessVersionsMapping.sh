@@ -2,8 +2,10 @@
 
 ###############################################################################################################
 #											Read-me    	     											      #
-# Das Skript muss auf der Konsole und innerhalb eines git-Repos gestartet werden. Damit können alle 	  	  #
-# relevanten Git-Repos gefetch und nach BPMN-Dateien abgesucht werden                                         #
+# Das Skript kann ohne weitere Angabe von Command-Line-Argumenten auf der Konsole gestartet werden, 		  #
+# sofern sich der Pfad innerhalb eines Git-Repos befindet. Andernfalls muss der Pfad zu einem git-Repo 		  #
+# angegeben werden. Von dort aus können alle relevanten Git-Repos gefetch und nach BPMN-Dateien 			  #
+# abgesucht werden.	  																						  #
 #													      													  #
 # Die Ergebnisse werden anschliessend im angegebenen Pfad in eine .csv-Daei geschrieben.		      # 
 # Die zu prüfenden Branches sowie Prozesse lassen sich bei Bedarf konfigurieren. Bei einem Releasewechsel     #
@@ -21,9 +23,7 @@ relevantBPMNPackageNames='produktwechsel|verkaufsproduktwechsel|unfalldeckungcha
 notRelevantBPMNPackageNames='partner'
 
 # Name vom File & sein Pfad
-bpmnVersionFile='BPMN-Versionierung-Bestand'
-bpmnVersionFileCsv=$HOME'/'$bpmnVersionFile'.csv'
-bpmnVersionFileXls=$HOME'/'$bpmnVersionFile'.xls'
+bpmnVersionFileCsv=$1
 
 function createEmptyBPMNVersionFile(){
   rm -f $bpmnVersionFileCsv
@@ -70,18 +70,9 @@ function getSyriusRel(){
   echo $branch | cut -d '/' -f 4
 }
 
-function createBPMNVersionXlsFile(){
-  echo 'Start creating xls-file...'
-  rm -f $bpmnVersionFileXls
-  java -jar XlsCreator.jar "$bpmnVersionFileCsv" "$bpmnVersionFileXls"
-  rm -f $bpmnVersionFileCsv
-  echo 'Done!'
-}
-
 # Fetcht die gewünschten Git-Repositories und sucht in diesen nach BPMN-Files, dessen package-namen dem gewünschten pattern entsprechen
 # Aus allen Treffern wird dann die BPMN-Version, der eigentliche Name des BPMN-Files, der Geschäftsvorfall und der Syr-Release ermittelt und in die csv-Datei geschrieben
 function readAllBPMNVersionsAndWrite2File(){
-  echo 'Start creating csv-file...'
   for branch in $(git for-each-ref --format="%(refname)" refs/remotes | grep -iE $relevantBranches | grep -vE $notRelevantBranches); do
     for file in $(git ls-tree -r --name-only $branch | grep '.bpmn' | grep -iE $relevantBPMNPackageNames | grep -vE $notRelevantBPMNPackageNames); do
     bpmnVersion=$(readBPMNVersion $file $branch)
@@ -94,8 +85,9 @@ function readAllBPMNVersionsAndWrite2File(){
     done
   done
 }
-
-echo 'Alors lets fätz!'
+if [ -n "$2" ]
+then
+  cd $2 # Falls das Skript ausserhalb von einem Git-Repo aufgerufen wird, ist ein cd notwendig. Andernfalls können keine git-Befehle abgesetzt werden
+fi
 createEmptyBPMNVersionFile
 readAllBPMNVersionsAndWrite2File
-createBPMNVersionXlsFile 
