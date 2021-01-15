@@ -1,10 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>BPMNProcessVersionMapping</groupId>
-  <artifactId>BPMNProcessVersionMapping</artifactId>
+  <groupId>SYRIUSRelease2VersionMapping</groupId>
+  <artifactId>SYRIUSRelease2VersionMapping</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name> BpmnProzessVersionMappingCreator</name>
-  <description>Erstellt eine XLS-Datei mit dem Mapping zwischen BPMN-Versionen &amp; SYRIUS Releasen</description>
+  <name> SYRIUSRelease2VersionMappingCreator</name>
+  <description>Erstellt eine XLS-Datei mit dem Mapping zwischen BPMN- bzw. API-Bridge Versionen &amp; SYRIUS Releasen</description>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <resources>

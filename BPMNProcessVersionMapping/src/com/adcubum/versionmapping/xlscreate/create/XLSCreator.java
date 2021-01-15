@@ -1,9 +1,15 @@
 
 package com.adcubum.versionmapping.xlscreate.create;
 
+import static java.util.Objects.requireNonNull;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -21,8 +27,21 @@ import com.adcubum.versionmapping.xlscreate.format.XLSSheetFormatter;
 public class XLSCreator {
 
    private XLSSheetFormatter xlsSheetFormatter;
-   private XLSSheetCreator xlsSheetCreator;
+   private List<XLSSheetCreator> xlsSheetCreators;
    private Workbook workbook;
+
+   /**
+    * Creates a new {@link XLSCreator} with a given list of 'sheet-name' to 'csv-file-with-the-content' pairs
+    * 
+    * @param sheetName2CsvPath
+    *        the key-value pairs for each sheet name and it's csv-file with the raw content
+    */
+   public XLSCreator(List<Pair<String, String>> sheetName2CsvPath) {
+      this.xlsSheetCreators = requireNonNull(sheetName2CsvPath).stream()
+            .map(pair -> new XLSSheetCreator(pair.getLeft(), pair.getRight()))
+            .collect(Collectors.toList());
+      init();
+   }
 
    /**
     * Creates a new {@link XLSCreator}
@@ -33,18 +52,28 @@ public class XLSCreator {
     *        the path to the csv-file which provides the actual content for the final xls-file
     */
    public XLSCreator(String sheetName, String csvFilePath) {
+      this.xlsSheetCreators = Collections.singletonList(new XLSSheetCreator(sheetName, csvFilePath));
+      init();
+   }
+
+   private void init() {
       this.workbook = new HSSFWorkbook();
-      this.xlsSheetCreator = new XLSSheetCreator(sheetName, csvFilePath);
       this.xlsSheetFormatter = new XLSSheetFormatter(workbook);
    }
 
    public void readCsvAndCreateXlsFile(String xlsOutputFilePath) {
       ConsoleLogger.log("Create file '" + xlsOutputFilePath + "'...");
-      createAndFormatXlsSheet();
+      createAndFormatXlsSheets();
       writeWorkbook2FileAndClose(xlsOutputFilePath);
    }
 
-   private void createAndFormatXlsSheet() {
+   private void createAndFormatXlsSheets() {
+      for (XLSSheetCreator xlsSheetCreator : xlsSheetCreators) {
+         createAndFormatXlsSheet(xlsSheetCreator);
+      }
+   }
+
+   private void createAndFormatXlsSheet(XLSSheetCreator xlsSheetCreator) {
       Sheet sheet = xlsSheetCreator.createXslSheetFromCsv(workbook);
       xlsSheetFormatter.formatWorkSheet(sheet);
    }
