@@ -20,12 +20,13 @@ import com.adcubum.versionmapping.xlscreate.create.XLSCreator;
  */
 public class BPMNProcessVersionMappingStarter {
 
-   public static void main(String[] args) {
-      verifyArguments(args);
-      new BPMNProcessVersionMappingStarter().start(args.length == 0 ? "" : args[0]);
-   }
-
-   private void start(String path2SyriusRepo) {
+   /**
+    * Creates the BPMN-Process to SYRIUS-Release mapping file
+    * 
+    * @param path2SyriusRepo
+    *        the path to the syrius repo (notnull)
+    */
+   public void createBPMNProcessVersionMapping(String path2SyriusRepo) {
       createRawBPMNProcessVersionMappingContent(path2SyriusRepo);
       readCsvAndCreateXlsFile(TEMP_RAW_CSV_CONTENT_FILE_PATH, BPMN_VERSIONIERUNGS_XLS_FILE_PATH);
       ConsoleLogger.log("Done!");
@@ -43,19 +44,5 @@ public class BPMNProcessVersionMappingStarter {
       } finally {
          FileSystemUtil.deleteFile(rawCsvContentFile);
       }
-   }
-
-   private static void verifyArguments(String[] args) {
-      if (isInvalidArgument(args)) {
-         ConsoleLogger.log("Invalid command line argument!" + System.lineSeparator() +
-               "We need either one argument which leads to a syrius repo or none" + System.lineSeparator() +
-               "Usage: java -jar BPMNProzessVersionMappingCreator.jar rel3_10_HEAD/syrius/" + System.lineSeparator() +
-               "Usage: java -jar BPMNProzessVersionMappingCreator.jar");
-         System.exit(-1);
-      }
-   }
-
-   private static boolean isInvalidArgument(String[] args) {
-      return args.length >= 1 && !args[0].endsWith(FileSystemUtil.getFileSystemSeparator());
    }
 }

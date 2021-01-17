@@ -29,12 +29,15 @@ import com.adcubum.versionmapping.xlscreate.create.XLSCreator;
  */
 public class APIBridgeVersionMappingStarter {
 
-   public static void main(String[] args) {
-      verifyArguments(args);
-      new APIBridgeVersionMappingStarter().start(args[0], args[1]);
-   }
-
-   private void start(String path2ApiBridgeSyrIntegrationRepo, String path2ApiBridgeRepo) {
+   /**
+    * Creates the API-Bridge-Version to SYRIUS-Release mapping file
+    * 
+    * @param path2ApiBridgeIntegrationRepo
+    *        the path to the api-bridge-syrius-integration repo
+    * @param path2ApiBridgeRepo
+    *        the path to the api-bridge repo
+    */
+   public void createAPIBridgeVersionMapping(String path2ApiBridgeSyrIntegrationRepo, String path2ApiBridgeRepo) {
       createAPIBridge2SYRIUSIntegMapping(path2ApiBridgeSyrIntegrationRepo);
       createAPIBridgeVersionRawContent(path2ApiBridgeRepo);
       readCsvAndCreateXlsFile();
@@ -75,24 +78,5 @@ public class APIBridgeVersionMappingStarter {
    private static List<Pair<String, String>> getSheetName2CsvFilePairs() {
       return Arrays.asList(new ImmutablePair<>(API_BRDIGE_VERSION_SHEET_NAME, TEMP_RAW_CSV_CONTENT_FILE_PATH),
             new ImmutablePair<>(API_BRDIGE_INTEG_VERSION_SHEET_NAME, TEMP_API_BRIDGE_SYR_REL_MAPPING_FILE_PATH));
-   }
-
-   private static void verifyArguments(String[] args) {
-      if (isInvalidArgument(args)) {
-         ConsoleLogger.log("Invalid command line arguments!" + System.lineSeparator() +
-               "We need two arguments which leads to the repo of the api-bridge-SYRIUS-integration and the api-bridge" + System.lineSeparator() +
-               "Usage: java -jar APIBridgeProzessVersionMappingCreator.jar apibridge-syriusintegration-bestandsverw/ apibridge-bestandsverw/"
-               + System.lineSeparator());
-         System.exit(-1);
-      }
-   }
-
-   private static boolean isInvalidArgument(String[] args) {
-      return args.length != 2 || isCorretArgSizeButWrongArguments(args);
-   }
-
-   private static boolean isCorretArgSizeButWrongArguments(String[] args) {
-      return args.length == 2 && (!args[0].endsWith(FileSystemUtil.getFileSystemSeparator())
-            || !args[1].endsWith(FileSystemUtil.getFileSystemSeparator()));
    }
 }

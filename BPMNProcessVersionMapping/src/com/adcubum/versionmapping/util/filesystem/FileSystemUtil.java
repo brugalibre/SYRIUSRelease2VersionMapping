@@ -7,6 +7,7 @@ import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import javax.swing.filechooser.FileSystemView;
 
@@ -31,6 +32,19 @@ public class FileSystemUtil {
    public static String getFileSystemSeparator() {
       FileSystem fileSystem = FileSystems.getDefault();
       return fileSystem.getSeparator();
+   }
+
+   /**
+    * Verifies if the given String argument leads to an existing directory
+    * 
+    * @param path2Dir
+    *        the path to a directory
+    * @return <code>true</code> if there exists a directory at the given path or <code>false</code> if not
+    */
+   public static boolean isDirectoryAndExists(String path2Dir) {
+      Path currentRelativePath = Paths.get(path2Dir);
+      File file = currentRelativePath.toFile();
+      return file.isDirectory();
    }
 
    /**

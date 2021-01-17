@@ -3,7 +3,7 @@ Aus convenience Gründen wurde dieses Bash-Skript in die Jar-Datei integriert, d
 
 Das zweite Programm 'APIBridgeVersionMapping' erstellt eine Excel-Datei, in welcher im einen Blatt das Versionmapping zwischen SYRIUS-Releasen, der API-Bridge-Integration sowie der API-Bridge und den effektiven API-Bridge-Services und in einem weiteren Blatt lediglich das Mapping zwischen der API-Bridge und der API-Bridge-SYRIUS-Integration enthalten sind.
 
-Dank dem Java-Wrapper erübrigt sich der Download von mehreren Bash-Skripts, wobei diese jeweils mittels chmod +x lauffähig gemacht werden mussten. Der Nachteil ist ein etwas komplizierteres Java-Progrämmchen, da dieses das bzw. die Bash-Skripts auf das Filesystem kopiert und ausführt.
+Je nach Command-line argument wird entweder ein BPMN-Prozess bzw. ein API-Bridge-Version Mapping erstellt. Zudem erübrigt sich der Download von mehreren Bash-Skripts, wobei diese jeweils mittels chmod +x lauffähig gemacht werden mussten. Der Nachteil ist ein etwas komplizierteres Java-Progrämmchen, da dieses das bzw. die Bash-Skripts auf das Filesystem kopiert und ausführt.
 
 Der Ablauf des BPMN-Versionierungs-Programms ist etwa so:
 - Start des Java-Programms
